@@ -98,5 +98,6 @@ for num in n:
             insert_data(name, f_date, url_2, desc, Download_link, image)
             print(f"Inserted data for movie: {name}")
             
+            
             if num == 79:
                 print("Successfully added into Database!")
