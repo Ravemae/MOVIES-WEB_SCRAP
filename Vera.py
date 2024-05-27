@@ -2,7 +2,6 @@ import sqlite3
 import requests
 from bs4 import BeautifulSoup
 
-
 def create_database():
     conn = sqlite3.connect('movies.db')
     cursor = conn.cursor()
@@ -34,14 +33,11 @@ def insert_data(title, date, link, desc, download, image):
         conn.close()
         return "Data inserted"
 
-
-url = "https://nkiri.com/category/international/"
-n = range(1, 11)
+base_url = "https://nkiri.com/category/international/"
+n = range(1, 80)
 for num in n:
-    url = f'{url}page/{num}'
+    url = f'{base_url}page/{num}'
     print(f"Getting data for page {num}")
-    if num == 10:
-        print("Successfully added into Database!:)")
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
     for movie in soup.find_all('article'):
@@ -71,10 +67,15 @@ for num in n:
                 Download_link = download
         
         for item in p_soup.find_all('div', {'class': 'overview'}):
-            'Description'
+            # Description
             desc = item.find('p')
-            desc_text = desc.text.strip()  
+            if desc:
+                desc_text = desc.text.strip()
+                
+                create_database()
+                insert_data(name, f_date, link, desc_text, Download_link, image)
+                print(f"Inserted data for movie: {name}")
+if num == 79:
+    print("Successfully added into Database!:)")
+
             
-            create_database()
-            insert_data(name, f_date, link, desc, Download_link, image)
-            print(f"Inserted data for movie: {name}")
